@@ -6,19 +6,21 @@ export type GameProps = {
 }
 
 const data = ['Kuba Rarytas', 'Beata Belzebub', 'Wielki Kozioł', 'Kunta Kinte', 'Josef Bratan'];
+let currentGameData = [...data];
 let currentPerson: string;
 let guessedPersonsCount = 0;
 
 
 export function Game(props: GameProps) {
     const navigate = () => {
-        props.navigation.navigate('Home')
+        props.navigation.navigate('Home');
+
     }
 
 
     const [currentRoundNumber, updateCurrentRoundNumber] = useState(1);
     console.log(`Guessed persons number: ${guessedPersonsCount}`)
-    const currentGameData = data;
+
     GetRandomPerson(currentGameData);
     if (props.numberOfRounds >= currentRoundNumber) {
         return (
@@ -42,10 +44,14 @@ export function Game(props: GameProps) {
         )
     }
     else {
+        currentGameData = [...data];
         return (<View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>Koniec gry zgadłeś: {guessedPersonsCount}</Text>
-                <Button title='Wróć do Home' onPress={navigate} />
+                <Button title='Wróć do Home' onPress={() => {
+                    guessedPersonsCount = 0;
+                    navigate();
+                }} />
             </View>
         </View>)
     }
