@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import { SHEET_ID, API_KEY } from '@env';
+
 import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import axios from 'axios';
 
 export function SetGame({ navigation }: any) {
   const navigate = (numberOfRounds: number) => {
-    navigation.navigate('Game', { numberOfRounds: numberOfRounds })
+    axios.get(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Arkusz1?dateTimeRenderOption=FORMATTED_STRING&majorDimension=ROWS&valueRenderOption=FORMATTED_VALUE&key=${API_KEY}`).then(response => {
+      const data = response.data.values.flat().slice(1)
+      navigation.navigate('Game', { numberOfRounds: numberOfRounds, data: data })
+    })
+
   }
 
   const [roundNumber, setRoundNumber] = useState('5');

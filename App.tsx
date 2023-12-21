@@ -14,7 +14,7 @@ function MyStack() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="SetGame" component={SetGame} />
       <Stack.Screen name="Game">
-        {props => (<Game numberOfRounds={props.route.params.numberOfRounds}  {...props} />)}
+        {props => (<Game numberOfRounds={props.route.params.numberOfRounds} data={props.route.params.data} {...props} />)}
       </Stack.Screen>
     </Stack.Navigator>
   );

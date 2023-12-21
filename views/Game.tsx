@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export type GameProps = {
-    numberOfRounds: number
+    numberOfRounds: number,
+    data: string[]
 }
 
-const data = ['Kuba Rarytas', 'Beata Belzebub', 'Wielki Kozioł', 'Kunta Kinte', 'Josef Bratan'];
-let currentGameData = [...data];
 let currentPerson: string;
 let guessedPersonsCount = 0;
+let usedPersons: string[] = [];
 
 
 export function Game(props: GameProps) {
@@ -16,12 +16,11 @@ export function Game(props: GameProps) {
         props.navigation.navigate('Home');
 
     }
-
-
+    let currentGameData = [...props.data];
     const [currentRoundNumber, updateCurrentRoundNumber] = useState(1);
-    console.log(`Guessed persons number: ${guessedPersonsCount}`)
 
-    GetRandomPerson(currentGameData);
+    GetRandomPerson(currentGameData, usedPersons);
+    usedPersons.push(currentPerson)
     if (props.numberOfRounds >= currentRoundNumber) {
         return (
             <View style={styles.container}>
@@ -44,7 +43,7 @@ export function Game(props: GameProps) {
         )
     }
     else {
-        currentGameData = [...data];
+        usedPersons = []
         return (<View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>Koniec gry zgadłeś: {guessedPersonsCount}</Text>
@@ -57,12 +56,15 @@ export function Game(props: GameProps) {
     }
 }
 
-const GetRandomPerson = (tableWithNames: string[]) => {
+const GetRandomPerson = (tableWithNames: string[], tableWithUsedNames: string[]) => {
+    tableWithUsedNames.forEach(element => {
+        let index = tableWithNames.indexOf(element);
+        if (index !== -1) {
+            tableWithNames.splice(index, 1);
+        }
+    })
     currentPerson = tableWithNames[Math.floor(Math.random() * tableWithNames.length)];
-    let index = tableWithNames.indexOf(currentPerson);
-    if (index !== -1) {
-        tableWithNames.splice(index, 1);
-    }
+
 }
 
 const styles = StyleSheet.create({
